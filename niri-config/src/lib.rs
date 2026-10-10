@@ -1661,6 +1661,10 @@ mod tests {
                     bottom_left: false,
                     bottom_right: false,
                 },
+                touchpad_swipe: TouchpadSwipe {
+                    horizontal_sensitivity: 1.0,
+                    vertical_sensitivity: 1.0,
+                },
             },
             overview: Overview {
                 zoom: 0.5,

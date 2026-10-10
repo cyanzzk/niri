@@ -1375,6 +1375,15 @@ impl<W: LayoutElement> Monitor<W> {
         compute_overview_zoom(&self.options, progress)
     }
 
+    fn touchpad_vertical_swipe_sensitivity(&self) -> f64 {
+        // Guard against 0, which would make the touchpad movement per workspace infinite.
+        self.options
+            .gestures
+            .touchpad_swipe
+            .vertical_sensitivity
+            .max(0.01)
+    }
+
     pub(super) fn set_overview_progress(&mut self, progress: Option<&super::OverviewProgress>) {
         let prev_render_idx = self.workspace_render_idx();
         self.overview_progress = progress.map(OverviewProgress::from);
@@ -1845,7 +1854,7 @@ impl<W: LayoutElement> Monitor<W> {
 
         let zoom = self.overview_zoom();
         let total_height = if gesture.is_touchpad {
-            WORKSPACE_GESTURE_MOVEMENT
+            WORKSPACE_GESTURE_MOVEMENT / self.touchpad_vertical_swipe_sensitivity()
         } else {
             self.workspace_size_with_gap(1.).h
         };
@@ -1979,7 +1988,7 @@ impl<W: LayoutElement> Monitor<W> {
         let total_height = if gesture.dnd_last_event_time.is_some() {
             WORKSPACE_DND_EDGE_SCROLL_MOVEMENT
         } else if gesture.is_touchpad {
-            WORKSPACE_GESTURE_MOVEMENT
+            WORKSPACE_GESTURE_MOVEMENT / self.touchpad_vertical_swipe_sensitivity()
         } else {
             self.workspace_size_with_gap(1.).h
         };

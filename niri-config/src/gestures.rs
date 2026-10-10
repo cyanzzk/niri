@@ -6,6 +6,7 @@ pub struct Gestures {
     pub dnd_edge_view_scroll: DndEdgeViewScroll,
     pub dnd_edge_workspace_switch: DndEdgeWorkspaceSwitch,
     pub hot_corners: HotCorners,
+    pub touchpad_swipe: TouchpadSwipe,
 }
 
 #[derive(knuffel::Decode, Debug, Default, Clone, Copy, PartialEq)]
@@ -16,6 +17,8 @@ pub struct GesturesPart {
     pub dnd_edge_workspace_switch: Option<DndEdgeWorkspaceSwitchPart>,
     #[knuffel(child)]
     pub hot_corners: Option<HotCorners>,
+    #[knuffel(child)]
+    pub touchpad_swipe: Option<TouchpadSwipePart>,
 }
 
 impl MergeWith<GesturesPart> for Gestures {
@@ -24,8 +27,41 @@ impl MergeWith<GesturesPart> for Gestures {
             (self, part),
             dnd_edge_view_scroll,
             dnd_edge_workspace_switch,
+            touchpad_swipe,
         );
         merge_clone!((self, part), hot_corners);
+    }
+}
+
+/// Multipliers for how far the view/workspaces move per unit of touchpad swipe.
+///
+/// 1.0 keeps the default feel; 2.0 means half the finger travel for the same movement.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct TouchpadSwipe {
+    pub horizontal_sensitivity: f64,
+    pub vertical_sensitivity: f64,
+}
+
+impl Default for TouchpadSwipe {
+    fn default() -> Self {
+        Self {
+            horizontal_sensitivity: 1.,
+            vertical_sensitivity: 1.,
+        }
+    }
+}
+
+#[derive(knuffel::Decode, Debug, Clone, Copy, PartialEq)]
+pub struct TouchpadSwipePart {
+    #[knuffel(child, unwrap(argument))]
+    pub horizontal_sensitivity: Option<FloatOrInt<0, 100>>,
+    #[knuffel(child, unwrap(argument))]
+    pub vertical_sensitivity: Option<FloatOrInt<0, 100>>,
+}
+
+impl MergeWith<TouchpadSwipePart> for TouchpadSwipe {
+    fn merge_with(&mut self, part: &TouchpadSwipePart) {
+        merge!((self, part), horizontal_sensitivity, vertical_sensitivity);
     }
 }
 

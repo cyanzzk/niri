@@ -3074,6 +3074,7 @@ impl<W: LayoutElement> ScrollingSpace<W> {
 
         let norm_factor = if gesture.is_touchpad {
             self.working_area.size.w / VIEW_GESTURE_WORKING_AREA_MOVEMENT
+                * self.options.gestures.touchpad_swipe.horizontal_sensitivity
         } else {
             1.
         };
@@ -3178,6 +3179,7 @@ impl<W: LayoutElement> ScrollingSpace<W> {
 
         let norm_factor = if gesture.is_touchpad {
             self.working_area.size.w / VIEW_GESTURE_WORKING_AREA_MOVEMENT
+                * self.options.gestures.touchpad_swipe.horizontal_sensitivity
         } else {
             1.
         };

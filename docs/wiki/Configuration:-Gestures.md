@@ -28,6 +28,11 @@ gestures {
         // bottom-left
         // bottom-right
     }
+
+    touchpad-swipe {
+        horizontal-sensitivity 1.0
+        vertical-sensitivity 1.0
+    }
 }
 ```
 
@@ -113,3 +118,21 @@ gestures {
 ```
 
 You can also customize hot corners per-output [in the output config](./Configuration:-Outputs.md#hot-corners).
+
+### `touchpad-swipe`
+
+Sensitivity of the touchpad swipe gestures (three-finger by default).
+
+`horizontal-sensitivity` scales how far the view scrolls per unit of finger movement when swiping horizontally, and `vertical-sensitivity` does the same for switching workspaces.
+The default is `1.0`; `2.0` makes the same movement need half the finger travel.
+
+This is useful on touchpads where the default feels like it needs too much travel.
+
+```kdl
+gestures {
+    touchpad-swipe {
+        horizontal-sensitivity 2.0
+        vertical-sensitivity 1.3
+    }
+}
+```
